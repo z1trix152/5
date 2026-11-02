@@ -601,7 +601,6 @@ local window = (function()
 					imgui.BeginChild("##bones", imgui.ImVec2(150, 185 + (mode[0] == 0 and 10 or 0)))
 						local p = imgui.GetCursorScreenPos()
 						local dl = imgui.GetWindowDrawList()
-						-- Рисуем фон-заглушку вместо текстуры скина
 						dl:AddRectFilled(p, imgui.ImVec2(p.x + 140, p.y + 175), 0x22FFFFFF, 6.0)
 
 						for i = 0, 5 do
@@ -723,11 +722,11 @@ end
 
 function imgui.NoAlphaButton(str_id, size)
 	local color = imgui.ImVec4(0, 0, 0, 0)
-  imgui.PushStyleColor(imgui.Col.Button, color)
-  imgui.PushStyleColor(imgui.Col.ButtonActive, color)
-  imgui.PushStyleColor(imgui.Col.ButtonHovered, color)
-  local result = imgui.Button(str_id, size)
-  imgui.PopStyleColor(3)
-  return result
+	imgui.PushStyleColor(imgui.Col.Button, color)
+	imgui.PushStyleColor(imgui.Col.ButtonActive, color)
+	imgui.PushStyleColor(imgui.Col.ButtonHovered, color)
+	local result = imgui.Button(str_id, size)
+	imgui.PopStyleColor(3)
+	return result
 end
 ```
