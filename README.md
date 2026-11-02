@@ -1,4 +1,4 @@
-```lua
+```lua 
 local ffi = require("ffi")
 local imgui = require("mimgui")
 local faicons = require("fAwesome6")
@@ -371,7 +371,6 @@ local mimgui = {} do
 			if el.sclock then
 				if os.clock() - el.sclock <= duration then
 					local k = (os.clock() - el.sclock) / duration
-					local fk = k * (2 - k)
 					local n = el.sposition + (el.tposition - el.sposition) * (k * (2 - k))
 
 					if n < 0 then
@@ -444,14 +443,14 @@ imgui.OnInitialize(function()
 	config.MergeMode = true
 	config.PixelSnapH = true
 
-	fontSize.b15 = mimgui.font_t.AddFontFromFileTTF(fontPath, 15, nil, { imgui.GetIO().Fonts:GetGlyphRangesCyrillic() }, "љњЋЌЎЏђѓѕѕјљњћќўџҐҐЁёєѕіІї")
+	fontSize.b15 = mimgui.font_t.AddFontFromFileTTF(fontPath, 15, nil, { imgui.GetIO().Fonts:GetGlyphRangesCyrillic() }, "вЂљвЂћвЂ¦вЂ вЂЎв‚¬вЂ°вЂ№вЂвЂ™вЂњвЂќвЂўвЂ“-в„ўвЂєв„–В°")
 	fontSize.i15 = mimgui.font_t.AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85("solid"), 15, config, {}, {
 		faicons("xmark"),
 		faicons("gear"),
 		faicons("ban")
 	})
 
-	fontSize.b18 = mimgui.font_t.AddFontFromFileTTF(fontPath, 18, nil, { imgui.GetIO().Fonts:GetGlyphRangesCyrillic() }, "љњЋЌЎЏђѓѕѕјљњћќўџҐҐЁёєѕіІї")
+	fontSize.b18 = mimgui.font_t.AddFontFromFileTTF(fontPath, 18, nil, { imgui.GetIO().Fonts:GetGlyphRangesCyrillic() }, "вЂљвЂћвЂ¦вЂ вЂЎв‚¬вЂ°вЂ№вЂвЂ™вЂњвЂќвЂўвЂ“-в„ўвЂєв„–")
 
 	fontSize.i32 = mimgui.font_t.AddFontFromMemoryCompressedBase85TTF(faicons.get_font_data_base85("solid"), 32, config, {}, {
 		faicons("crosshairs")
@@ -599,9 +598,24 @@ local window = (function()
 				if mode[0] < 2 then
 					imgui.Spacing()
 					imgui.BeginChild("##bones", imgui.ImVec2(150, 185 + (mode[0] == 0 and 10 or 0)))
+						imgui.SetCursorPos(imgui.ImVec2(5, 5))
 						local p = imgui.GetCursorScreenPos()
 						local dl = imgui.GetWindowDrawList()
-						dl:AddRectFilled(p, imgui.ImVec2(p.x + 140, p.y + 175), 0x22FFFFFF, 6.0)
+						
+						-- Рисуем схематичный скелет вместо текстуры
+						local bg_col = 0x44FFFFFF
+						local line_col = 0x33FFFFFF
+						-- Голова (круг)
+						dl:AddCircleFilled(imgui.ImVec2(p.x + 75, p.y + 25), 12, bg_col, 12)
+						-- Тело (линии плечи-торс)
+						dl:AddLine(imgui.ImVec2(p.x + 50, p.y + 50), imgui.ImVec2(p.x + 100, p.y + 50), line_col, 3)
+						dl:AddLine(imgui.ImVec2(p.x + 75, p.y + 35), imgui.ImVec2(p.x + 75, p.y + 90), line_col, 4)
+						-- Руки
+						dl:AddLine(imgui.ImVec2(p.x + 50, p.y + 50), imgui.ImVec2(p.x + 35, p.y + 90), line_col, 3)
+						dl:AddLine(imgui.ImVec2(p.x + 100, p.y + 50), imgui.ImVec2(p.x + 115, p.y + 90), line_col, 3)
+						-- Ноги
+						dl:AddLine(imgui.ImVec2(p.x + 75, p.y + 90), imgui.ImVec2(p.x + 60, p.y + 140), line_col, 3)
+						dl:AddLine(imgui.ImVec2(p.x + 75, p.y + 90), imgui.ImVec2(p.x + 90, p.y + 140), line_col, 3)
 
 						for i = 0, 5 do
 							imgui.SetCursorPos(bones[i].pos)
@@ -729,4 +743,5 @@ function imgui.NoAlphaButton(str_id, size)
 	imgui.PopStyleColor(3)
 	return result
 end
+
 ```
